@@ -1,17 +1,17 @@
 package com.mycompany.generatorforbbdd;
 
-public class DAOParamams {
+public class Paramams {
     String type;
     String name;
-    public DAOParamams(String type, String name){
+    public Paramams(String type, String name){
         this.type = type;
-        this.name = name;
+        this.name = name.toLowerCase();
     }
 
 
 
     public String getDeclarator(){
-        return type + " " + name + ";";
+        return getJavaType() + " " + name + ";";
     }
 
     public String getConstructorParam() {
@@ -64,27 +64,32 @@ public class DAOParamams {
 
     public String getJavaType(){
         
+        return getJavaType(type);
+
+    }
+    public static String getJavaType(String type){
+        type = type.toUpperCase();
         if (type.contains("BOOLEAN") || type.contains("BOOL")) {
             return "boolean";
-        }else if (type.contains("TINYINT") || type.contains("SMALLINT") || 
-            type.contains("MEDIUMINT") || type.contains("INT") || 
-            type.contains("INTEGER") || type.contains("BIGINT")) {
+        }else if (type.contains("TINYINT") || type.contains("SMALLINT") ||
+                type.contains("MEDIUMINT") || type.contains("INT") ||
+                type.contains("INTEGER") || type.contains("BIGINT")) {
             return "int";
-        }else if (type.contains("DECIMAL") || type.contains("NUMERIC") || 
-            type.contains("REAL")) {
+        }else if (type.contains("DECIMAL") || type.contains("NUMERIC") ||
+                type.contains("REAL")) {
             return "double";
         } else if ( type.contains("FLOAT") ){
             return "float";
         } else if ( type.contains("DOUBLE") ){
             return "double";
-        } else if (type.contains("CHAR") || type.contains("VARCHAR") || 
-            type.contains("TEXT") || type.contains("TINYTEXT") || 
-            type.contains("MEDIUMTEXT") || type.contains("LONGTEXT") || 
-            type.contains("ENUM") || type.contains("SET")) {
+        } else if (type.contains("CHAR") || type.contains("VARCHAR") ||
+                type.contains("TEXT") || type.contains("TINYTEXT") ||
+                type.contains("MEDIUMTEXT") || type.contains("LONGTEXT") ||
+                type.contains("ENUM") || type.contains("SET")) {
             return "String";
-        }else if (type.contains("DATE") || type.contains("TIME") || 
-            type.contains("YEAR") || type.contains("DATETIME") || 
-            type.contains("TIMESTAMP")) {
+        }else if (type.contains("DATE") || type.contains("TIME") ||
+                type.contains("YEAR") || type.contains("DATETIME") ||
+                type.contains("TIMESTAMP")) {
             return "LocalDate";
         }
 
