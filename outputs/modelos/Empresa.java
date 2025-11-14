@@ -2,19 +2,17 @@
 
 public class Empresa{
 private int id;
+private int codigo;
 private String nombre;
 private String web;
-private String domiciliofiscal;
-private String contacto;
 private int fk_id_direccion;
 private int fk_id_informacion;
 
-public Empresa( int id, String nombre, String web, String domiciliofiscal, String contacto, int fk_id_direccion, int fk_id_informacion )  {
+public Empresa( int id, int codigo, String nombre, String web, int fk_id_direccion, int fk_id_informacion )  {
 this.id = id;
+this.codigo = codigo;
 this.nombre = nombre;
 this.web = web;
-this.domiciliofiscal = domiciliofiscal;
-this.contacto = contacto;
 this.fk_id_direccion = fk_id_direccion;
 this.fk_id_informacion = fk_id_informacion;
 }
@@ -25,6 +23,14 @@ public int getId() {
  
 public void setId(int id) {
     this.id = id;
+}
+ 
+public int getCodigo() {
+    return codigo;
+}
+ 
+public void setCodigo(int codigo) {
+    this.codigo = codigo;
 }
  
 public String getNombre() {
@@ -41,22 +47,6 @@ public String getWeb() {
  
 public void setWeb(String web) {
     this.web = web;
-}
- 
-public String getDomiciliofiscal() {
-    return domiciliofiscal;
-}
- 
-public void setDomiciliofiscal(String domiciliofiscal) {
-    this.domiciliofiscal = domiciliofiscal;
-}
- 
-public String getContacto() {
-    return contacto;
-}
- 
-public void setContacto(String contacto) {
-    this.contacto = contacto;
 }
  
 public int getFk_id_direccion() {

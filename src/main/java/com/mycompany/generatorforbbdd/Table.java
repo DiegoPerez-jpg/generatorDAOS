@@ -68,12 +68,12 @@ public class Table {
     }
 
     public void crearArchivo(){
-        crearArchivo("modelos","",sb,objectName);
+        crearArchivo("modelos","","",sb,objectName);
     }
 
-    public static void crearArchivo(String repositoryName,String prefijoName,StringBuilder contenido,String nombreArchivo){
+    public static void crearArchivo(String repositoryName,String prefijoName,String sufijoName,StringBuilder contenido,String nombreArchivo){
         nombreArchivo = getNameWithCase(nombreArchivo);
-        try (FileWriter writer = new FileWriter("./outputs/"+repositoryName+"/"+prefijoName+nombreArchivo+".java")) {
+        try (FileWriter writer = new FileWriter("./outputs/"+repositoryName+"/"+prefijoName+nombreArchivo+sufijoName+".java")) {
             writer.write(contenido.toString());
             System.out.println("Archivo creado correctamente.");
         } catch (IOException e) {

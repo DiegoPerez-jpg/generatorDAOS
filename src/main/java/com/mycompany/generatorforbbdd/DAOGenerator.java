@@ -16,7 +16,7 @@ public class DAOGenerator {
         sb.append("import java.sql.*;\n" +
                 "import java.util.ArrayList;\n" +
                 "import java.util.List;\n\n")
-                .append("public class "+table.objectName+"DAO {\n\n")
+                .append("public class "+table.getNameWithCase()+"DAO {\n\n")
                 .append(createInsert())
                 .append("\n\n")
                 .append(createUpdate())
@@ -47,7 +47,7 @@ public class DAOGenerator {
                         "            idGenerado = rs.getLong(1);\n" +
                         "        }\n" +
                         "    }"+
-                        "entity.setId(idGenerado)"+
+                        "entity.setId(idGenerado);"+
                         "        return entity;" )
                 .append("    } catch (SQLException e) {\n")
                 .append("        e.printStackTrace();\n")                
@@ -162,7 +162,7 @@ public class DAOGenerator {
     }
 
     public void crearArchivo(){
-        Table.crearArchivo("DAOS","DAO",sb,table.objectName);
+        Table.crearArchivo("DAOS","","DAO",sb,table.getNameWithCase());
     }
 
     // ===============================

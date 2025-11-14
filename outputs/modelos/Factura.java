@@ -3,26 +3,32 @@
 public class Factura{
 private int id;
 private int fk_id_empresa;
+private int fk_id_cliente;
 private String numero;
 private LocalDate fecha_emision;
+private LocalDate fecha_servicio;
 private String concepto;
 private double base_imponible;
 private double iva_total;
 private double total_factura;
 private String estado;
 private String observaciones;
+private String tipo;
 
-public Factura( int id, int fk_id_empresa, String numero, LocalDate fecha_emision, String concepto, double base_imponible, double iva_total, double total_factura, String estado, String observaciones )  {
+public Factura( int id, int fk_id_empresa, int fk_id_cliente, String numero, LocalDate fecha_emision, LocalDate fecha_servicio, String concepto, double base_imponible, double iva_total, double total_factura, String estado, String observaciones, String tipo )  {
 this.id = id;
 this.fk_id_empresa = fk_id_empresa;
+this.fk_id_cliente = fk_id_cliente;
 this.numero = numero;
 this.fecha_emision = fecha_emision;
+this.fecha_servicio = fecha_servicio;
 this.concepto = concepto;
 this.base_imponible = base_imponible;
 this.iva_total = iva_total;
 this.total_factura = total_factura;
 this.estado = estado;
 this.observaciones = observaciones;
+this.tipo = tipo;
 }
 
 public int getId() {
@@ -41,6 +47,14 @@ public void setFk_id_empresa(int fk_id_empresa) {
     this.fk_id_empresa = fk_id_empresa;
 }
  
+public int getFk_id_cliente() {
+    return fk_id_cliente;
+}
+ 
+public void setFk_id_cliente(int fk_id_cliente) {
+    this.fk_id_cliente = fk_id_cliente;
+}
+ 
 public String getNumero() {
     return numero;
 }
@@ -55,6 +69,14 @@ public LocalDate getFecha_emision() {
  
 public void setFecha_emision(LocalDate fecha_emision) {
     this.fecha_emision = fecha_emision;
+}
+ 
+public LocalDate getFecha_servicio() {
+    return fecha_servicio;
+}
+ 
+public void setFecha_servicio(LocalDate fecha_servicio) {
+    this.fecha_servicio = fecha_servicio;
 }
  
 public String getConcepto() {
@@ -103,6 +125,14 @@ public String getObservaciones() {
  
 public void setObservaciones(String observaciones) {
     this.observaciones = observaciones;
+}
+ 
+public String getTipo() {
+    return tipo;
+}
+ 
+public void setTipo(String tipo) {
+    this.tipo = tipo;
 }
  
 

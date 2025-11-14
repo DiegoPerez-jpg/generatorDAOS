@@ -18,7 +18,7 @@ public class ConexionGenerator {
     public void init(){
         craftConexionSB();
         Table.setupModelosRepository("conexion");
-        Table.crearArchivo("conexion","",s,"conexion");
+        Table.crearArchivo("conexion","","",s,"conexion");
     }
 
     public void craftConexionSB(){
