@@ -30,7 +30,6 @@ public class DAOGenerator {
                 .append("}");
 
     }
-
     public StringBuilder createInsert(){
         StringBuilder sb = new StringBuilder();
         sb.append("public void insert(")
@@ -50,17 +49,18 @@ public class DAOGenerator {
     }
 
     public String setsForInsert(){
-        return table.paramams.stream().map(param -> "ps.set"+Table.getNameWithCase(param.getJavaType())+"("+table.paramams.indexOf(param)+1+", entity.get"+Table.getNameWithCase(param.name)+"());").collect(Collectors.joining("\n"));
+        return table.paramams.stream().skip(1).map(param -> "ps.set"+Table.getNameWithCase(param.getJavaType())+"("+(table.paramams.indexOf(param))+", entity.get"+Table.getNameWithCase(param.name)+"());").collect(Collectors.joining("\n"));
     }
 
     public String[] valuesForInsert(){
         String[] result = new String[2];
-        result[0] = table.paramams.stream().map(param -> param.type).collect(Collectors.joining(", "));
-        result[1] = table.paramams.stream().map(param -> "?").collect(Collectors.joining(", "));
+        result[0] = table.paramams.stream().skip(1).map(param -> param.name).collect(Collectors.joining(", "));
+        result[1] = table.paramams.stream().skip(1).map(param -> "?").collect(Collectors.joining(", "));
         return result;
 
 
     }
+
 
     // ===============================
     // UPDATE

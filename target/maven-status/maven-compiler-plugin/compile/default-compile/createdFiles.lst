@@ -1,0 +1,10 @@
+com\mycompany\generatorforbbdd\SecondaryController.class
+com\mycompany\generatorforbbdd\Conexion.class
+com\mycompany\generatorforbbdd\DAOGenerator.class
+module-info.class
+com\mycompany\generatorforbbdd\App.class
+com\mycompany\generatorforbbdd\ConexionGenerator.class
+com\mycompany\generatorforbbdd\MainService.class
+com\mycompany\generatorforbbdd\Paramams.class
+com\mycompany\generatorforbbdd\PrimaryController.class
+com\mycompany\generatorforbbdd\Table.class

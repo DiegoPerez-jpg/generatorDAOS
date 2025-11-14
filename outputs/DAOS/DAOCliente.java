@@ -2,29 +2,25 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class tcentrDAO {
+public class clienteDAO {
 
-public void insert(Tcentr tcentr) {
-    String sql = "INSERT INTO tcentr (int(11), varchar(100), varchar(100)) VALUES (?, ?, ?)";
+public void insert(Cliente cliente) {
+    String sql = "INSERT INTO cliente (fk_id_entidad) VALUES (?)";
     try (Connection conn = Conexion.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
-ps.setInt(01, entity.getNumce());
-ps.setString(11, entity.getNomce());
-ps.setString(21, entity.getSence());        ps.executeUpdate();
+ps.setInt(1, entity.getFk_id_entidad());        ps.executeUpdate();
     } catch (SQLException e) {
         e.printStackTrace();
     }
 }
 
 
-public void update(Tcentr tcentr) {
-    String sql = "UPDATE tcentr SET numce = ?, nomce = ?, sence = ? WHERE id = ?";
+public void update(Cliente cliente) {
+    String sql = "UPDATE cliente SET fk_id_entidad = ? WHERE id = ?";
     try (Connection conn = Conexion.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setInt(1, tcentr.getNumce());
-        ps.setString(2, tcentr.getNomce());
-        ps.setString(3, tcentr.getSence());
-        ps.setInt(4, tcentr.getId());
+        ps.setInt(1, cliente.getFk_id_entidad());
+        ps.setInt(2, cliente.getId());
         ps.executeUpdate();
     } catch (SQLException e) {
         e.printStackTrace();
@@ -33,7 +29,7 @@ public void update(Tcentr tcentr) {
 
 
 public void delete(int id) {
-    String sql = "DELETE FROM tcentr WHERE id = ?";
+    String sql = "DELETE FROM cliente WHERE id = ?";
     try (Connection conn = Conexion.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setInt(1, id);
@@ -44,14 +40,14 @@ public void delete(int id) {
 }
 
 
-public List<Tcentr> findAll() {
-    List<Tcentr> list = new ArrayList<>();
-    String sql = "SELECT * FROM tcentr";
+public List<Cliente> findAll() {
+    List<Cliente> list = new ArrayList<>();
+    String sql = "SELECT * FROM cliente";
     try (Connection conn = Conexion.getConnection();
          Statement st = conn.createStatement();
          ResultSet rs = st.executeQuery(sql)) {
         while (rs.next()) {
-            list.add(new Tcentr(rs.getInt("numce"), rs.getString("nomce"), rs.getString("sence")));
+            list.add(new Cliente(rs.getInt("id"), rs.getInt("fk_id_entidad")));
         }
     } catch (SQLException e) {
         e.printStackTrace();
@@ -60,14 +56,14 @@ public List<Tcentr> findAll() {
 }
 
 
-public Tcentr findById(int id) {
-    String sql = "SELECT * FROM tcentr WHERE id = ?";
+public Cliente findById(int id) {
+    String sql = "SELECT * FROM cliente WHERE id = ?";
     try (Connection conn = Conexion.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setInt(1, id);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
-            return new Tcentr(rs.getInt("numce"), rs.getString("nomce"), rs.getString("sence"));
+            return new Cliente(rs.getInt("id"), rs.getInt("fk_id_entidad"));
         }
     } catch (SQLException e) {
         e.printStackTrace();
