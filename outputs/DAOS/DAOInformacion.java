@@ -4,15 +4,21 @@ import java.util.List;
 
 public class informacionDAO {
 
-public void insert(Informacion informacion) {
+public Informacion insert(Informacion entity) {
     String sql = "INSERT INTO informacion (nif, email, telefono) VALUES (?, ?, ?)";
+long idGenerado = -1;
     try (Connection conn = Conexion.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
+         PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 ps.setString(1, entity.getNif());
 ps.setString(2, entity.getEmail());
 ps.setString(3, entity.getTelefono());        ps.executeUpdate();
-    } catch (SQLException e) {
+try (ResultSet rs = ps.getGeneratedKeys()) {
+        if (rs.next()) {
+            idGenerado = rs.getLong(1);
+        }
+    }entity.setId(idGenerado)        return entity;    } catch (SQLException e) {
         e.printStackTrace();
+        return null;
     }
 }
 

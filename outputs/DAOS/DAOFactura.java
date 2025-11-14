@@ -4,10 +4,11 @@ import java.util.List;
 
 public class facturaDAO {
 
-public void insert(Factura factura) {
+public Factura insert(Factura entity) {
     String sql = "INSERT INTO factura (fk_id_empresa, numero, fecha_emision, concepto, base_imponible, iva_total, total_factura, estado, observaciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+long idGenerado = -1;
     try (Connection conn = Conexion.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
+         PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 ps.setInt(1, entity.getFk_id_empresa());
 ps.setString(2, entity.getNumero());
 ps.setLocalDate(3, entity.getFecha_emision());
@@ -17,8 +18,13 @@ ps.setDouble(6, entity.getIva_total());
 ps.setDouble(7, entity.getTotal_factura());
 ps.setString(8, entity.getEstado());
 ps.setString(9, entity.getObservaciones());        ps.executeUpdate();
-    } catch (SQLException e) {
+try (ResultSet rs = ps.getGeneratedKeys()) {
+        if (rs.next()) {
+            idGenerado = rs.getLong(1);
+        }
+    }entity.setId(idGenerado)        return entity;    } catch (SQLException e) {
         e.printStackTrace();
+        return null;
     }
 }
 

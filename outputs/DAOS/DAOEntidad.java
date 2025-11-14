@@ -4,16 +4,22 @@ import java.util.List;
 
 public class entidadDAO {
 
-public void insert(Entidad entidad) {
+public Entidad insert(Entidad entity) {
     String sql = "INSERT INTO entidad (codigo, nombre, fk_id_informacion, fk_id_direccion) VALUES (?, ?, ?, ?)";
+long idGenerado = -1;
     try (Connection conn = Conexion.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
+         PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 ps.setInt(1, entity.getCodigo());
 ps.setString(2, entity.getNombre());
 ps.setInt(3, entity.getFk_id_informacion());
 ps.setInt(4, entity.getFk_id_direccion());        ps.executeUpdate();
-    } catch (SQLException e) {
+try (ResultSet rs = ps.getGeneratedKeys()) {
+        if (rs.next()) {
+            idGenerado = rs.getLong(1);
+        }
+    }entity.setId(idGenerado)        return entity;    } catch (SQLException e) {
         e.printStackTrace();
+        return null;
     }
 }
 

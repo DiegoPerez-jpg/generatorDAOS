@@ -32,17 +32,26 @@ public class DAOGenerator {
     }
     public StringBuilder createInsert(){
         StringBuilder sb = new StringBuilder();
-        sb.append("public void insert(")
-                .append(table.getNameWithCase()).append(" ").append(table.objectName).append(") {\n")
+        sb.append("public "+table.getNameWithCase()+" insert(")
+                .append(table.getNameWithCase()).append(" entity) {\n")
                 .append("    String sql = \"INSERT INTO ").append(table.objectName)
                 .append(" (").append(valuesForInsert()[0]).append(") VALUES (")
-                .append(valuesForInsert()[1]).append(")\";\n")
+                .append(valuesForInsert()[1]).append(")\";\n")                
+                .append("long idGenerado = -1;\n")
                 .append("    try (Connection conn = Conexion.getConnection();\n")
-                .append("         PreparedStatement ps = conn.prepareStatement(sql)) {\n")
+                .append("         PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {\n")
                 .append(setsForInsert())
                 .append("        ps.executeUpdate();\n")
+                .append("try (ResultSet rs = ps.getGeneratedKeys()) {\n" +
+                        "        if (rs.next()) {\n" +
+                        "            idGenerado = rs.getLong(1);\n" +
+                        "        }\n" +
+                        "    }"+
+                        "entity.setId(idGenerado)"+
+                        "        return entity;" )
                 .append("    } catch (SQLException e) {\n")
-                .append("        e.printStackTrace();\n")
+                .append("        e.printStackTrace();\n")                
+                .append("        return null;\n")
                 .append("    }\n")
                 .append("}\n");
         return sb;

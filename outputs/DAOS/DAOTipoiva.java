@@ -4,14 +4,20 @@ import java.util.List;
 
 public class tipoivaDAO {
 
-public void insert(Tipoiva tipoiva) {
+public Tipoiva insert(Tipoiva entity) {
     String sql = "INSERT INTO tipoiva (concepto, porcentaje) VALUES (?, ?)";
+long idGenerado = -1;
     try (Connection conn = Conexion.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
+         PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 ps.setString(1, entity.getConcepto());
 ps.setDouble(2, entity.getPorcentaje());        ps.executeUpdate();
-    } catch (SQLException e) {
+try (ResultSet rs = ps.getGeneratedKeys()) {
+        if (rs.next()) {
+            idGenerado = rs.getLong(1);
+        }
+    }entity.setId(idGenerado)        return entity;    } catch (SQLException e) {
         e.printStackTrace();
+        return null;
     }
 }
 

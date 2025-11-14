@@ -4,10 +4,11 @@ import java.util.List;
 
 public class productoDAO {
 
-public void insert(Producto producto) {
+public Producto insert(Producto entity) {
     String sql = "INSERT INTO producto (codigo, descripcion, precio_coste, precio_venta, stock, fk_id_entidad, fk_id_tipoiva) VALUES (?, ?, ?, ?, ?, ?, ?)";
+long idGenerado = -1;
     try (Connection conn = Conexion.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
+         PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 ps.setString(1, entity.getCodigo());
 ps.setString(2, entity.getDescripcion());
 ps.setDouble(3, entity.getPrecio_coste());
@@ -15,8 +16,13 @@ ps.setDouble(4, entity.getPrecio_venta());
 ps.setDouble(5, entity.getStock());
 ps.setInt(6, entity.getFk_id_entidad());
 ps.setInt(7, entity.getFk_id_tipoiva());        ps.executeUpdate();
-    } catch (SQLException e) {
+try (ResultSet rs = ps.getGeneratedKeys()) {
+        if (rs.next()) {
+            idGenerado = rs.getLong(1);
+        }
+    }entity.setId(idGenerado)        return entity;    } catch (SQLException e) {
         e.printStackTrace();
+        return null;
     }
 }
 

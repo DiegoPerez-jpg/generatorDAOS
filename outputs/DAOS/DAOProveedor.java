@@ -4,13 +4,19 @@ import java.util.List;
 
 public class proveedorDAO {
 
-public void insert(Proveedor proveedor) {
+public Proveedor insert(Proveedor entity) {
     String sql = "INSERT INTO proveedor (fk_id_entidad) VALUES (?)";
+long idGenerado = -1;
     try (Connection conn = Conexion.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
+         PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 ps.setInt(1, entity.getFk_id_entidad());        ps.executeUpdate();
-    } catch (SQLException e) {
+try (ResultSet rs = ps.getGeneratedKeys()) {
+        if (rs.next()) {
+            idGenerado = rs.getLong(1);
+        }
+    }entity.setId(idGenerado)        return entity;    } catch (SQLException e) {
         e.printStackTrace();
+        return null;
     }
 }
 
