@@ -1,21 +1,21 @@
 
 
 public class Tipoiva{
-private int id;
+private Integer id;
 private String concepto;
-private double porcentaje;
+private Double porcentaje;
 
-public Tipoiva( int id, String concepto, double porcentaje )  {
+public Tipoiva( Integer id, String concepto, Double porcentaje )  {
 this.id = id;
 this.concepto = concepto;
 this.porcentaje = porcentaje;
 }
 
-public int getId() {
+public Integer getId() {
     return id;
 }
  
-public void setId(int id) {
+public void setId(Integer id) {
     this.id = id;
 }
  
@@ -27,11 +27,11 @@ public void setConcepto(String concepto) {
     this.concepto = concepto;
 }
  
-public double getPorcentaje() {
+public Double getPorcentaje() {
     return porcentaje;
 }
  
-public void setPorcentaje(double porcentaje) {
+public void setPorcentaje(Double porcentaje) {
     this.porcentaje = porcentaje;
 }
  

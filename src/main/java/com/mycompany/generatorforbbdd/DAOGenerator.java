@@ -27,6 +27,8 @@ public class DAOGenerator {
                 .append("\n\n")
                 .append(createFindById())
                 .append("\n\n")
+                .append(createFilterByAll())
+                .append("\n\n")
                 .append("}");
 
     }
@@ -148,9 +150,7 @@ public class DAOGenerator {
                 .append("        ResultSet rs = ps.executeQuery();\n")
                 .append("        if (rs.next()) {\n")
                 .append("            return new ").append(table.getNameWithCase()).append("(")
-                .append(table.paramams.stream()
-                        .map(p -> "rs.get" + Table.getNameWithCase(p.getJavaType()) + "(\"" + p.name + "\")")
-                        .collect(Collectors.joining(", ")))
+                .append(getRsGetting())
                 .append(");\n")
                 .append("        }\n")
                 .append("    } catch (SQLException e) {\n")
@@ -188,6 +188,79 @@ public class DAOGenerator {
                 .append("    }\n")
                 .append("    return list;\n")
                 .append("}\n");
+        return sb;
+    }
+
+
+    private StringBuilder getRsGetting(){
+        return new StringBuilder().append(table.paramams.stream()
+                .map(p -> "rs.get" + Table.getNameWithCase(p.getPrimitiveJavaTypes()) + "(\"" + p.name + "\")")
+                .collect(Collectors.joining(", ")));
+    }
+
+    // ===============================
+    // FILTER BY ALL
+    // ===============================
+
+    private StringBuilder createFilterByAll(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("public List<"+table.getNameWithCase()+"> findByAll(")
+                .append(table.getVariableConstructors()+") {\n")
+                .append("String baseSql = \"SELECT * FROM "+table.objectName+"\";\n" +
+                        "        List<String> condiciones = new ArrayList<>();\n" +
+                        "        List<Object> valores = new ArrayList<>();")
+                .append(constructNullingPart())
+                .append("if (condiciones.isEmpty()) {\n" +
+                        "            return new ArrayList<>();\n" +
+                        "        }\n")
+                .append("String sql = baseSql + \" WHERE \" + String.join(\" AND \", condiciones);\n" +
+                        "        List<"+table.getNameWithCase()+"> lista = new ArrayList<>();\n")
+                .append("try (Connection conn = Conexion.getConnection();\n" +
+                "             PreparedStatement ps = conn.prepareStatement(sql)) {\n" +
+                "\n" +
+                "            for (int i = 0; i < valores.size(); i++) {\n" +
+                "                Object val = valores.get(i);\n" +
+                "                if (val instanceof Integer) {\n" +
+                "                    ps.setInt(i + 1, (Integer) val);\n" +
+                "                } else if (val instanceof Double) {\n" +
+                "                    ps.setDouble(i + 1, (Double) val);\n" +
+                "                } else if (val instanceof Date) {\n" +
+                "                    ps.setDate(i + 1, (Date) val);\n" +
+                "                } else if (val instanceof String) {\n" +
+                "                    ps.setString(i + 1, (String) val);\n" +
+                "                }\n" +
+                "            }\n" +
+                "\n" +
+                "            ResultSet rs = ps.executeQuery();\n" +
+                "\n" +
+                "            while (rs.next()) {\n" +
+                "                lista.add(new "+table.getNameWithCase()+"(")
+                .append(getRsGetting()+"\n));\n}\n")
+                .append("} catch (SQLException e) {\n" +
+                        "            e.printStackTrace();\n" +
+                        "        }\n" +
+                        "\n" +
+                        "        return lista;\n" +
+                        "    }");
+                return sb;
+    }
+
+
+
+    private StringBuilder constructNullingPart(){
+        StringBuilder sb = new StringBuilder();
+        for (Paramams param : table.paramams){
+            sb.append(isNullParameter(param.name)+"\n");
+        }
+        return sb;
+    }
+
+    private StringBuilder isNullParameter(String param){
+        StringBuilder sb = new StringBuilder();
+        sb.append("   if ("+param+" != null) {\n" +
+                "            condiciones.add(\""+param+" = ?\");\n" +
+                "            valores.add("+param+");\n" +
+                "        }");
         return sb;
     }
 }

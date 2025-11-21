@@ -1,14 +1,14 @@
 
 
 public class Empresa{
-private int id;
-private int codigo;
+private Integer id;
+private Integer codigo;
 private String nombre;
 private String web;
-private int fk_id_direccion;
-private int fk_id_informacion;
+private Integer fk_id_direccion;
+private Integer fk_id_informacion;
 
-public Empresa( int id, int codigo, String nombre, String web, int fk_id_direccion, int fk_id_informacion )  {
+public Empresa( Integer id, Integer codigo, String nombre, String web, Integer fk_id_direccion, Integer fk_id_informacion )  {
 this.id = id;
 this.codigo = codigo;
 this.nombre = nombre;
@@ -17,19 +17,19 @@ this.fk_id_direccion = fk_id_direccion;
 this.fk_id_informacion = fk_id_informacion;
 }
 
-public int getId() {
+public Integer getId() {
     return id;
 }
  
-public void setId(int id) {
+public void setId(Integer id) {
     this.id = id;
 }
  
-public int getCodigo() {
+public Integer getCodigo() {
     return codigo;
 }
  
-public void setCodigo(int codigo) {
+public void setCodigo(Integer codigo) {
     this.codigo = codigo;
 }
  
@@ -49,19 +49,19 @@ public void setWeb(String web) {
     this.web = web;
 }
  
-public int getFk_id_direccion() {
+public Integer getFk_id_direccion() {
     return fk_id_direccion;
 }
  
-public void setFk_id_direccion(int fk_id_direccion) {
+public void setFk_id_direccion(Integer fk_id_direccion) {
     this.fk_id_direccion = fk_id_direccion;
 }
  
-public int getFk_id_informacion() {
+public Integer getFk_id_informacion() {
     return fk_id_informacion;
 }
  
-public void setFk_id_informacion(int fk_id_informacion) {
+public void setFk_id_informacion(Integer fk_id_informacion) {
     this.fk_id_informacion = fk_id_informacion;
 }
  

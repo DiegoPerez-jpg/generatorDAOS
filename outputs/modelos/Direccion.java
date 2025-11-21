@@ -1,7 +1,7 @@
 
 
 public class Direccion{
-private int id;
+private Integer id;
 private String direccion;
 private String codigopostal;
 private String ciudad;
@@ -9,7 +9,7 @@ private String provincia;
 private String pais;
 private String etiqueta;
 
-public Direccion( int id, String direccion, String codigopostal, String ciudad, String provincia, String pais, String etiqueta )  {
+public Direccion( Integer id, String direccion, String codigopostal, String ciudad, String provincia, String pais, String etiqueta )  {
 this.id = id;
 this.direccion = direccion;
 this.codigopostal = codigopostal;
@@ -19,11 +19,11 @@ this.pais = pais;
 this.etiqueta = etiqueta;
 }
 
-public int getId() {
+public Integer getId() {
     return id;
 }
  
-public void setId(int id) {
+public void setId(Integer id) {
     this.id = id;
 }
  

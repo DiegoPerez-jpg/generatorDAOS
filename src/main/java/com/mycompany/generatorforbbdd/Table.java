@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 public class Table {
     public StringBuilder sb;
-    ArrayList<Paramams> paramams;
+    public ArrayList<Paramams> paramams;
     String objectName;
     
     public Table(ResultSet tabla, String objectName) throws SQLException{

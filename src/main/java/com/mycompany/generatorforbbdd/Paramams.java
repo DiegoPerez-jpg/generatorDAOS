@@ -67,7 +67,12 @@ public class Paramams {
         return getJavaType(type);
 
     }
-    public static String getJavaType(String type){
+    public String getPrimitiveJavaTypes(){
+
+        return getPrimitiveJavaTypes(type);
+
+    }
+    public static String getPrimitiveJavaTypes(String type){
         type = type.toUpperCase();
         if (type.contains("BOOLEAN") || type.contains("BOOL")) {
             return "boolean";
@@ -82,6 +87,37 @@ public class Paramams {
             return "float";
         } else if ( type.contains("DOUBLE") ){
             return "double";
+        } else if (type.contains("CHAR") || type.contains("VARCHAR") ||
+                type.contains("TEXT") || type.contains("TINYTEXT") ||
+                type.contains("MEDIUMTEXT") || type.contains("LONGTEXT") ||
+                type.contains("ENUM") || type.contains("SET")) {
+            return "String";
+        }else if (type.contains("DATE") || type.contains("TIME") ||
+                type.contains("YEAR") || type.contains("DATETIME") ||
+                type.contains("TIMESTAMP")) {
+            return "LocalDate";
+        }
+
+        // Si no coincide con ninguno de los anteriores:
+        return "otro";
+
+    }
+
+    public static String getJavaType(String type){
+        type = type.toUpperCase();
+        if (type.contains("BOOLEAN") || type.contains("BOOL")) {
+            return "Boolean";
+        }else if (type.contains("TINYINT") || type.contains("SMALLINT") ||
+                type.contains("MEDIUMINT") || type.contains("INT") ||
+                type.contains("INTEGER") || type.contains("BIGINT")) {
+            return "Integer";
+        }else if (type.contains("DECIMAL") || type.contains("NUMERIC") ||
+                type.contains("REAL")) {
+            return "Double";
+        } else if ( type.contains("FLOAT") ){
+            return "Float";
+        } else if ( type.contains("DOUBLE") ){
+            return "Double";
         } else if (type.contains("CHAR") || type.contains("VARCHAR") ||
                 type.contains("TEXT") || type.contains("TINYTEXT") ||
                 type.contains("MEDIUMTEXT") || type.contains("LONGTEXT") ||

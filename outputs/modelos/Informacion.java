@@ -1,23 +1,23 @@
 
 
 public class Informacion{
-private int id;
+private Integer id;
 private String nif;
 private String email;
 private String telefono;
 
-public Informacion( int id, String nif, String email, String telefono )  {
+public Informacion( Integer id, String nif, String email, String telefono )  {
 this.id = id;
 this.nif = nif;
 this.email = email;
 this.telefono = telefono;
 }
 
-public int getId() {
+public Integer getId() {
     return id;
 }
  
-public void setId(int id) {
+public void setId(Integer id) {
     this.id = id;
 }
  

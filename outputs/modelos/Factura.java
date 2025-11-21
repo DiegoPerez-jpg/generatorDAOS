@@ -1,21 +1,21 @@
 
 
 public class Factura{
-private int id;
-private int fk_id_empresa;
-private int fk_id_cliente;
+private Integer id;
+private Integer fk_id_empresa;
+private Integer fk_id_cliente;
 private String numero;
 private LocalDate fecha_emision;
 private LocalDate fecha_servicio;
 private String concepto;
-private double base_imponible;
-private double iva_total;
-private double total_factura;
+private Double base_imponible;
+private Double iva_total;
+private Double total_factura;
 private String estado;
 private String observaciones;
 private String tipo;
 
-public Factura( int id, int fk_id_empresa, int fk_id_cliente, String numero, LocalDate fecha_emision, LocalDate fecha_servicio, String concepto, double base_imponible, double iva_total, double total_factura, String estado, String observaciones, String tipo )  {
+public Factura( Integer id, Integer fk_id_empresa, Integer fk_id_cliente, String numero, LocalDate fecha_emision, LocalDate fecha_servicio, String concepto, Double base_imponible, Double iva_total, Double total_factura, String estado, String observaciones, String tipo )  {
 this.id = id;
 this.fk_id_empresa = fk_id_empresa;
 this.fk_id_cliente = fk_id_cliente;
@@ -31,27 +31,27 @@ this.observaciones = observaciones;
 this.tipo = tipo;
 }
 
-public int getId() {
+public Integer getId() {
     return id;
 }
  
-public void setId(int id) {
+public void setId(Integer id) {
     this.id = id;
 }
  
-public int getFk_id_empresa() {
+public Integer getFk_id_empresa() {
     return fk_id_empresa;
 }
  
-public void setFk_id_empresa(int fk_id_empresa) {
+public void setFk_id_empresa(Integer fk_id_empresa) {
     this.fk_id_empresa = fk_id_empresa;
 }
  
-public int getFk_id_cliente() {
+public Integer getFk_id_cliente() {
     return fk_id_cliente;
 }
  
-public void setFk_id_cliente(int fk_id_cliente) {
+public void setFk_id_cliente(Integer fk_id_cliente) {
     this.fk_id_cliente = fk_id_cliente;
 }
  
@@ -87,27 +87,27 @@ public void setConcepto(String concepto) {
     this.concepto = concepto;
 }
  
-public double getBase_imponible() {
+public Double getBase_imponible() {
     return base_imponible;
 }
  
-public void setBase_imponible(double base_imponible) {
+public void setBase_imponible(Double base_imponible) {
     this.base_imponible = base_imponible;
 }
  
-public double getIva_total() {
+public Double getIva_total() {
     return iva_total;
 }
  
-public void setIva_total(double iva_total) {
+public void setIva_total(Double iva_total) {
     this.iva_total = iva_total;
 }
  
-public double getTotal_factura() {
+public Double getTotal_factura() {
     return total_factura;
 }
  
-public void setTotal_factura(double total_factura) {
+public void setTotal_factura(Double total_factura) {
     this.total_factura = total_factura;
 }
  
