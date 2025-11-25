@@ -15,6 +15,10 @@ public class ServiceGenerator implements CaseInterface {
         init();
     }
 
+    public Table getTable() {
+        return table;
+    }
+
     public String getClassName() {
         return className;
     }
@@ -34,7 +38,7 @@ public class ServiceGenerator implements CaseInterface {
     }
 
     private String createDAOObject(){
-        return "private "+daoGenerator.getClassNameCase()+"  "+daoGenerator.getClassName()+" =  new "+daoGenerator.getClassNameCase()+"();";
+        return "private "+daoGenerator.getClassNameCase()+"  "+daoGenerator.getClassName()+" =  new "+daoGenerator.getClassNameCase()+"();\n";
     }
 
 
@@ -42,32 +46,32 @@ public class ServiceGenerator implements CaseInterface {
         return new StringBuilder("public void eliminar"+table.getNameWithCase()+"("+table.getNameWithCase()+" "+table.objectName+") {\n"
                 +
                 "        "+daoGenerator.getClassName()+".delete("+table.objectName+".getId());\n" +
-                "    }");
+                "    }\n");
     }
 
     private StringBuilder createSelectAll(){
         return new StringBuilder(" public List<"+table.getNameWithCase()+"> selectAll(){\n" +
-                "        return "+daoGenerator.getClassNameCase()+".findAll();\n" +
-                "    }");
+                "        return "+daoGenerator.getClassName()+".findAll();\n" +
+                "    }\n");
     }
 
     private StringBuilder createCrear(){
         StringBuilder sb = new StringBuilder();
 
-        sb.append("public void update").append(table.getNameWithCase()).append("(").append(table.getNameWithCase()).append(" ").append(table.objectName).append(") throws ").append("IllegalArgumentException{\n");
+        sb.append("public void crear").append(table.getNameWithCase()).append("(").append(table.getNameWithCase()).append(" ").append(table.objectName).append(") throws ").append("IllegalArgumentException{\n");
         sb.append(table.paramams.stream()
                 .filter(p->p.getIs_unique().equals(true))
-                .map(p->"if (!direccionDAO.filterByAll("+table.getReplacedCastingFunctionParams(table.paramams.indexOf(p))+").isEmpty())throw new IllegalArgumentException(\"El "+p.name+" no existe\");\n").collect(Collectors.joining()));
-        sb.append(daoGenerator.getClassName()).append(".insert(").append(table.getNameWithCase()).append(");\n");
+                .map(p->"if (!"+daoGenerator.getClassName()+".filterByAll"+table.getReplacedCastingFunctionParams(table.paramams.indexOf(p))+".isEmpty())throw new IllegalArgumentException(\"El "+p.name+" ya existe\");\n").collect(Collectors.joining()));
+        sb.append(daoGenerator.getClassName()).append(".insert(").append(table.objectName).append(");\n");
         sb.append("}\n");
         return sb;
     }
 
     private StringBuilder createUpdate(){
         StringBuilder sb = new StringBuilder();
-        sb.append("public void eliminar").append(table.getNameWithCase()).append("(").append(table.getNameWithCase()).append(" ").append(table.objectName).append(") throws ").append("IllegalArgumentException{\n");
-        sb.append(table.paramams.stream().filter(p->p.getIs_unique().equals(true)).map(p->"if (!direccionDAO.filterByAll("+table.getReplacedCastingFunctionParams(table.paramams.indexOf(p))+").isEmpty())throw new IllegalArgumentException(\"El "+p.name+" no existe\");\n").collect(Collectors.joining()));
-        sb.append(daoGenerator.getClassName()).append(".update(").append(table.getNameWithCase()).append(");\n");
+        sb.append("public void update").append(table.getNameWithCase()).append("(").append(table.getNameWithCase()).append(" ").append(table.objectName).append(") throws ").append("IllegalArgumentException{\n");
+        sb.append(table.paramams.stream().filter(p->p.getIs_unique().equals(true)).map(p->"if (!"+daoGenerator.getClassName()+".filterByAll"+table.getReplacedCastingFunctionParams(table.paramams.indexOf(p))+".isEmpty())throw new IllegalArgumentException(\"El "+p.name+" ya existe\");\n").collect(Collectors.joining()));
+        sb.append(daoGenerator.getClassName()).append(".update(").append(table.objectName).append(");\n");
         sb.append("}\n");
         return sb;
 

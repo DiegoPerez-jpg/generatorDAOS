@@ -25,9 +25,9 @@ public class PrimaryController {
 
     @FXML
     private void switchToSecondary() throws IOException {
-        urlFIeld.setText("jdbc:mysql://192.168.204.109:3306/businessmanagement");
-        passwordFIeld.setText("");
-        rootFIeld.setText("usuario");
+        urlFIeld.setText("jdbc:mysql://localhost:3306/empresa");
+        passwordFIeld.setText(System.getenv("DB_PASS") == null? "" :  System.getenv("DB_PASS"));
+        rootFIeld.setText(System.getenv("DB_USER"));
         MainService ms = new MainService(urlFIeld.getText(), rootFIeld.getText(), passwordFIeld.getText());
 //        App.setRoot("secondary");
     }

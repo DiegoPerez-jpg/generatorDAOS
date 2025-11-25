@@ -34,6 +34,10 @@ public class Paramams {
         return "this." + name + " = " + name + ";";
     }
 
+    public String getgetGetter(){
+        return ".get"+Table.getNameWithCase(name)+"()";
+    }
+
     public StringBuilder getGetter(){
         StringBuilder sb = new StringBuilder();
 

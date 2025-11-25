@@ -2,14 +2,15 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClienteDAO {
+public class TcentrDAO {
 
-public Cliente insert(Cliente entity) {
-    String sql = "INSERT INTO cliente () VALUES ()";
+public Tcentr insert(Tcentr entity) {
+    String sql = "INSERT INTO tcentr (nomce, sence) VALUES (?, ?)";
 long idGenerado = -1;
     try (Connection conn = Conexion.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-        ps.executeUpdate();
+ps.setString(1, entity.getNomce());
+ps.setString(2, entity.getSence());        ps.executeUpdate();
 try (ResultSet rs = ps.getGeneratedKeys()) {
         if (rs.next()) {
             idGenerado = rs.getLong(1);
@@ -21,11 +22,14 @@ try (ResultSet rs = ps.getGeneratedKeys()) {
 }
 
 
-public void update(Cliente cliente) {
-    String sql = "UPDATE cliente SET  WHERE id = ?";
+public void update(Tcentr tcentr) {
+    String sql = "UPDATE tcentr SET numce = ?, nomce = ?, sence = ? WHERE id = ?";
     try (Connection conn = Conexion.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setInt(1, cliente.getId());
+        ps.setInteger(1, tcentr.getNumce());
+        ps.setString(2, tcentr.getNomce());
+        ps.setString(3, tcentr.getSence());
+        ps.setInt(4, tcentr.getId());
         ps.executeUpdate();
     } catch (SQLException e) {
         e.printStackTrace();
@@ -34,7 +38,7 @@ public void update(Cliente cliente) {
 
 
 public void delete(int id) {
-    String sql = "DELETE FROM cliente WHERE id = ?";
+    String sql = "DELETE FROM tcentr WHERE id = ?";
     try (Connection conn = Conexion.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setInt(1, id);
@@ -45,14 +49,14 @@ public void delete(int id) {
 }
 
 
-public List<Cliente> findAll() {
-    List<Cliente> list = new ArrayList<>();
-    String sql = "SELECT * FROM cliente";
+public List<Tcentr> findAll() {
+    List<Tcentr> list = new ArrayList<>();
+    String sql = "SELECT * FROM tcentr";
     try (Connection conn = Conexion.getConnection();
          Statement st = conn.createStatement();
          ResultSet rs = st.executeQuery(sql)) {
         while (rs.next()) {
-            list.add(new Cliente(rs.getInteger("id")));
+            list.add(new Tcentr(rs.getInteger("numce"), rs.getString("nomce"), rs.getString("sence")));
         }
     } catch (SQLException e) {
         e.printStackTrace();
@@ -61,14 +65,14 @@ public List<Cliente> findAll() {
 }
 
 
-public Cliente findById(int id) {
-    String sql = "SELECT * FROM cliente WHERE id = ?";
+public Tcentr findById(int id) {
+    String sql = "SELECT * FROM tcentr WHERE id = ?";
     try (Connection conn = Conexion.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setInt(1, id);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
-            return new Cliente(rs.getInt("id"));
+            return new Tcentr(rs.getInt("numce"), rs.getString("nomce"), rs.getString("sence"));
         }
     } catch (SQLException e) {
         e.printStackTrace();
@@ -77,21 +81,7 @@ public Cliente findById(int id) {
 }
 
 
-public List<Cliente> findByAll(Integer id) {
-String baseSql = "SELECT * FROM cliente";
-        List<String> condiciones = new ArrayList<>();
-        List<Object> valores = new ArrayList<>();   if (id != null) {
-            condiciones.add("id = ?");
-            valores.add(id);
-        }
-if (condiciones.isEmpty()) {
-            return new ArrayList<>();
-        }
-String sql = baseSql + " WHERE " + String.join(" AND ", condiciones);
-        List<Cliente> lista = new ArrayList<>();
-try (Connection conn = Conexion.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
+public PreparedStatement setupParameters( PreparedStatement ps,List<Object> valores,Integer numce, String nomce, String sence){
             for (int i = 0; i < valores.size(); i++) {
                 Object val = valores.get(i);
                 if (val instanceof Integer) {
@@ -104,11 +94,39 @@ try (Connection conn = Conexion.getConnection();
                     ps.setString(i + 1, (String) val);
                 }
             }
+return ps;}
 
+
+public String getFindByAllSql(List<Object> valores,Integer numce, String nomce, String sence){String baseSql = "SELECT * FROM tcentr";
+        List<String> condiciones = new ArrayList<>();
+   if (numce != null) {
+            condiciones.add("numce = ?");
+            valores.add(numce);
+        }
+   if (nomce != null) {
+            condiciones.add("nomce = ?");
+            valores.add(nomce);
+        }
+   if (sence != null) {
+            condiciones.add("sence = ?");
+            valores.add(sence);
+        }
+String sql = baseSql + " WHERE " + String.join(" AND ", condiciones);
+return sql;
+}
+
+
+
+public List<Tcentr> findByAll(Integer numce, String nomce, String sence) {
+        List<Object> valores = new ArrayList<>();        List<Tcentr> lista = new ArrayList<>();
+try (Connection conn = Conexion.getConnection();
+             PreparedStatement ps = conn.prepareStatement(getFindByAllSql(valores,tcentrDAO,tcentrDAO,tcentrDAO))) {
+
+ps = setupParameters(ps,valores, tcentrDAO,tcentrDAO,tcentrDAO);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                lista.add(new Cliente(rs.getInt("id")
+                lista.add(new Tcentr(rs.getInt("numce"), rs.getString("nomce"), rs.getString("sence")
 ));
 }
 } catch (SQLException e) {

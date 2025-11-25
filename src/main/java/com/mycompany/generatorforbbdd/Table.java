@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.sql.*;
 
 import java.util.ArrayList;
+import java.util.Objects;
+
 public class Table {
     public StringBuilder sb;
     public ArrayList<Paramams> paramams;
@@ -15,7 +17,7 @@ public class Table {
         this.objectName = objectName;
         paramams = new ArrayList<>();
         while(tabla.next()){
-            paramams.add(new Paramams(tabla.getString("Type"), tabla.getString("Field"), tabla.getString("Key")=="UNI"));
+            paramams.add(new Paramams(tabla.getString("Type"), tabla.getString("Field"), Objects.equals(tabla.getString("Key"), "UNI")));
         }
         init();
     }
@@ -131,7 +133,7 @@ public class Table {
         String result = "(";
         int contador=0;
         for (Paramams param : paramams) {
-            result += contador == i?  "null "+", " :  param.name+" , ";
+            result += contador == i?   objectName+param.getgetGetter()+" , ":"null "+", "  ;
             contador++;
         }
         result = result.substring(0, result.length()-2);

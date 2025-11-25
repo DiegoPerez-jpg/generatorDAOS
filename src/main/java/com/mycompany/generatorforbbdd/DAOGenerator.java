@@ -8,7 +8,7 @@ public class DAOGenerator implements CaseInterface{
     private String className;
     public DAOGenerator(Table table) {
         this.table = table;
-        className = table.objectName;
+        className = table.objectName+"DAO";
         init();
     }
 
@@ -34,6 +34,10 @@ public class DAOGenerator implements CaseInterface{
                 .append(createFindAll())
                 .append("\n\n")
                 .append(createFindById())
+                .append("\n\n")
+                .append(createSetupParameters())
+                .append("\n\n")
+                .append(createGetFindByAllSql())
                 .append("\n\n")
                 .append(createFilterByAll())
                 .append("\n\n")
@@ -214,30 +218,11 @@ public class DAOGenerator implements CaseInterface{
         StringBuilder sb = new StringBuilder();
         sb.append("public List<"+table.getNameWithCase()+"> findByAll(")
                 .append(table.getVariableConstructors()+") {\n")
-                .append("String baseSql = \"SELECT * FROM "+table.objectName+"\";\n" +
-                        "        List<String> condiciones = new ArrayList<>();\n" +
-                        "        List<Object> valores = new ArrayList<>();")
-                .append(constructNullingPart())
-                .append("if (condiciones.isEmpty()) {\n" +
-                        "            return new ArrayList<>();\n" +
-                        "        }\n")
-                .append("String sql = baseSql + \" WHERE \" + String.join(\" AND \", condiciones);\n" +
-                        "        List<"+table.getNameWithCase()+"> lista = new ArrayList<>();\n")
+                .append("        List<Object> valores = new ArrayList<>();")
+                .append(        "        List<"+table.getNameWithCase()+"> lista = new ArrayList<>();\n")
                 .append("try (Connection conn = Conexion.getConnection();\n" +
-                "             PreparedStatement ps = conn.prepareStatement(sql)) {\n" +
-                "\n" +
-                "            for (int i = 0; i < valores.size(); i++) {\n" +
-                "                Object val = valores.get(i);\n" +
-                "                if (val instanceof Integer) {\n" +
-                "                    ps.setInt(i + 1, (Integer) val);\n" +
-                "                } else if (val instanceof Double) {\n" +
-                "                    ps.setDouble(i + 1, (Double) val);\n" +
-                "                } else if (val instanceof Date) {\n" +
-                "                    ps.setDate(i + 1, (Date) val);\n" +
-                "                } else if (val instanceof String) {\n" +
-                "                    ps.setString(i + 1, (String) val);\n" +
-                "                }\n" +
-                "            }\n" +
+                "             PreparedStatement ps = conn.prepareStatement(getFindByAllSql(valores,"+getPassingVariables()+"))) {\n" +
+                "\n" +"ps = setupParameters(ps,valores, "+getPassingVariables()+");"+
                 "\n" +
                 "            ResultSet rs = ps.executeQuery();\n" +
                 "\n" +
@@ -253,6 +238,41 @@ public class DAOGenerator implements CaseInterface{
                 return sb;
     }
 
+    private StringBuilder createGetFindByAllSql(){
+        return new StringBuilder().append("public String getFindByAllSql(List<Object> valores,"+table.getVariableConstructors()+"){")
+                .append("String baseSql = \"SELECT * FROM "+table.objectName+"\";\n")
+                .append("        List<String> condiciones = new ArrayList<>();\n" )
+                .append(constructNullingPart())
+                .append("String sql = baseSql + \" WHERE \" + String.join(\" AND \", condiciones);\n" )
+                .append("return sql;\n}\n\n");
+
+    }
+
+    private String getPassingVariables(){
+        return table.paramams.stream().map(p->getClassName()).collect(Collectors.joining(","));
+    }
+
+
+
+    private StringBuilder createSetupParameters(){
+        return new StringBuilder().append("public PreparedStatement setupParameters( PreparedStatement ps,List<Object> valores,"+table.getVariableConstructors()+"){\n")
+                .append(
+                        "            for (int i = 0; i < valores.size(); i++) {\n" +
+                        "                Object val = valores.get(i);\n" +
+                        "                if (val instanceof Integer) {\n" +
+                        "                    ps.setInt(i + 1, (Integer) val);\n" +
+                        "                } else if (val instanceof Double) {\n" +
+                        "                    ps.setDouble(i + 1, (Double) val);\n" +
+                        "                } else if (val instanceof Date) {\n" +
+                        "                    ps.setDate(i + 1, (Date) val);\n" +
+                        "                } else if (val instanceof String) {\n" +
+                        "                    ps.setString(i + 1, (String) val);\n" +
+                        "                }\n" +
+                        "            }\n" )
+                .append("return ps;"
+)
+                .append("}\n");
+    }
 
 
     private StringBuilder constructNullingPart(){

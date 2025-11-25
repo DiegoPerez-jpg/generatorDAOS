@@ -51,7 +51,6 @@ public class MainService {
     private void crearModelos(){
         Table.setupModelosRepository();
         tables.forEach(Table::crearArchivo);
-
     }
 
     private void setupDAOSGenerators(){
@@ -60,6 +59,7 @@ public class MainService {
 
     private void setupServicesGenerators(){
         serviceGenerators = tables.stream().map(table -> new ServiceGenerator(table,daoGenerators.stream().filter(d -> d.getTable()==table).findFirst().orElse(null))).collect(Collectors.toCollection(ArrayList::new));
+
     }
 
     private void crearServicios(){
