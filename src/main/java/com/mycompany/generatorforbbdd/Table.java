@@ -15,7 +15,7 @@ public class Table {
         this.objectName = objectName;
         paramams = new ArrayList<>();
         while(tabla.next()){
-            paramams.add(new Paramams(tabla.getString("Type"), tabla.getString("Field")));
+            paramams.add(new Paramams(tabla.getString("Type"), tabla.getString("Field"), tabla.getString("Key")=="UNI"));
         }
         init();
     }
@@ -124,6 +124,18 @@ public class Table {
             result += param.getConstructorParam()+", ";
         }
         result = result.substring(0, result.length()-2);
+        return result;
+    }
+
+    public String getReplacedCastingFunctionParams(int i){
+        String result = "(";
+        int contador=0;
+        for (Paramams param : paramams) {
+            result += contador == i?  "null "+", " :  param.name+" , ";
+            contador++;
+        }
+        result = result.substring(0, result.length()-2);
+        result +=")";
         return result;
     }
 

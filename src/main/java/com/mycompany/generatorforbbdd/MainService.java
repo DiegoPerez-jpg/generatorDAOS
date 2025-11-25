@@ -12,6 +12,7 @@ public class MainService {
     Connection conexion;
     ArrayList<Table> tables;
     ArrayList<DAOGenerator> daoGenerators;
+    ArrayList<ServiceGenerator> serviceGenerators;
     ConexionGenerator cg;
     public MainService(String url, String user, String password){
         conexion = Conexion.getConnection(url,user,password);
@@ -35,8 +36,10 @@ public class MainService {
 
         setupModelosGenerators();
         setupDAOSGenerators();
+        setupServicesGenerators();
         crearModelos();
         crearDAOS();
+        crearServicios();
         cg.init();
     }
 
@@ -53,6 +56,15 @@ public class MainService {
 
     private void setupDAOSGenerators(){
         daoGenerators =  tables.stream().map(DAOGenerator::new).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private void setupServicesGenerators(){
+        serviceGenerators = tables.stream().map(table -> new ServiceGenerator(table,daoGenerators.stream().filter(d -> d.getTable()==table).findFirst().orElse(null))).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private void crearServicios(){
+        Table.setupModelosRepository("Services");
+        serviceGenerators.forEach(ServiceGenerator::crearArchivo);
     }
 
     private void setupModelosGenerators() {

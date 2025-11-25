@@ -3,12 +3,20 @@ package com.mycompany.generatorforbbdd;
 public class Paramams {
     String type;
     String name;
-    public Paramams(String type, String name){
+    Boolean is_unique;
+    public Paramams(String type, String name, boolean is_unique) {
         this.type = type;
         this.name = name.toLowerCase();
+        this.is_unique = is_unique;
     }
 
+    public Boolean getIs_unique() {
+        return is_unique;
+    }
 
+    public void setIs_unique(Boolean is_unique) {
+        this.is_unique = is_unique;
+    }
 
     public String getDeclarator(){
         return getJavaType() + " " + name + ";";

@@ -2,15 +2,23 @@ package com.mycompany.generatorforbbdd;
 
 import java.util.stream.Collectors;
 
-public class DAOGenerator {
+public class DAOGenerator implements CaseInterface{
     private Table table;
     private StringBuilder sb;
+    private String className;
     public DAOGenerator(Table table) {
         this.table = table;
+        className = table.objectName;
         init();
     }
 
+    public String getClassName() {
+        return className;
+    }
 
+    public Table getTable() {
+        return table;
+    }
     public void init(){
         sb = new StringBuilder();
         sb.append("import java.sql.*;\n" +
