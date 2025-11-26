@@ -206,7 +206,7 @@ public class DAOGenerator implements CaseInterface{
 
     private StringBuilder getRsGetting(){
         return new StringBuilder().append(table.paramams.stream()
-                .map(p -> "rs.get" + Table.getNameWithCase(p.getPrimitiveJavaTypes()) + "(\"" + p.name + "\")")
+                .map(p -> "rs.get" + Table.getNameWithCase(Paramams.ifLocalDateSwitchToDate(p.getPrimitiveJavaTypes())) + "(\"" + p.name + "\")"+ Paramams.ifLocalDategetToLocalDate(p.getPrimitiveJavaTypes()) )
                 .collect(Collectors.joining(", ")));
     }
 
@@ -222,7 +222,7 @@ public class DAOGenerator implements CaseInterface{
                 .append(        "        List<"+table.getNameWithCase()+"> lista = new ArrayList<>();\n")
                 .append("try (Connection conn = Conexion.getConnection();\n" +
                 "             PreparedStatement ps = conn.prepareStatement(getFindByAllSql(valores,"+getPassingVariables()+"))) {\n" +
-                "\n" +"ps = setupParameters(ps,valores, "+getPassingVariables()+");"+
+                "\n" +"setupParameters(ps,valores, "+getPassingVariables()+");"+
                 "\n" +
                 "            ResultSet rs = ps.executeQuery();\n" +
                 "\n" +
@@ -249,13 +249,13 @@ public class DAOGenerator implements CaseInterface{
     }
 
     private String getPassingVariables(){
-        return table.paramams.stream().map(p->getClassName()).collect(Collectors.joining(","));
+        return table.paramams.stream().map(p->p.name).collect(Collectors.joining(","));
     }
 
 
 
     private StringBuilder createSetupParameters(){
-        return new StringBuilder().append("public PreparedStatement setupParameters( PreparedStatement ps,List<Object> valores,"+table.getVariableConstructors()+"){\n")
+        return new StringBuilder().append("public PreparedStatement setupParameters( PreparedStatement ps,List<Object> valores,"+table.getVariableConstructors()+") throws SQLException {\n")
                 .append(
                         "            for (int i = 0; i < valores.size(); i++) {\n" +
                         "                Object val = valores.get(i);\n" +

@@ -79,6 +79,15 @@ public class Paramams {
         return getJavaType(type);
 
     }
+
+    public static String ifLocalDateSwitchToDate(String s){
+        return s.equalsIgnoreCase("LocalDate")? "date" : s;
+    }
+
+    public static String ifLocalDategetToLocalDate(String s){
+        return s.equalsIgnoreCase("LocalDate")? ".toLocalDate()" : "";
+    }
+
     public String getPrimitiveJavaTypes(){
 
         return getPrimitiveJavaTypes(type);
